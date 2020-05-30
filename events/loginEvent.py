@@ -175,7 +175,7 @@ def handle(tornadoRequest):
 		# b20190401.22f56c084ba339eefd9c7ca4335e246f80 = Ainu Aoba's Birthday Build
 		# b20191223.3 = Unknown Ainu build? (Taken from most users osuver in cookiezi.pw)
 		# b20190226.2 = hqOsu (hq-af)
-		if glob.conf.extra["mode"]["anticheat"]:
+		if True:
 			# Ainu Client 2020 update
 			if tornadoRequest.request.headers.get("ainu") == "happy":
 				log.info(f"Account {userID} tried to use Ainu Client 2020!")
