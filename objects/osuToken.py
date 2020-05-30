@@ -78,14 +78,13 @@ class token:
 		self.totalScore = 0
 		self.gameRank = 0
 		self.pp = 0
+		self.lastMod = "Regular"
+		self.currentMod = "Regular"
 		
-		# Relax
+		# Special mods
 		self.relaxing = False
-		self.relaxAnnounce = False
-
-		#Autopilot
 		self.autopiloting = False
-		self.autoAnnounce = False
+		self.scoreV2 = False
 
 		# Generate/set token
 		if token_ is not None:

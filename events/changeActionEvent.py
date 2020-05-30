@@ -51,14 +51,15 @@ if userToken.matchID != -1 and userToken.actionID != actions.MULTIPLAYING and us
 		userToken.autopiloting = False
 		userToken.relaxing = True
 		userToken.ScoreV2 = False
+		userToken.lastMod = userToken.currentMod
+		userToken.currentMod = 'Relax'
 		if userToken.actionID in (0, 1, 14):
 			UserText = packetData["actionText"] + "on Relax"
 		else:
 			UserText = packetData["actionText"] + " on Relax"
 		userToken.actionText = UserText
 		userToken.updateCachedStats()
-		if userToken.specialMod == False:
-			userToken.specialMod = True
+		if userToken.currentMod != userToken.lastMod:
 			userToken.enqueue(serverPackets.notification("You're playing with Relax, we've changed the leaderboard to Relax."))
 
 	# autopiloten
@@ -66,14 +67,15 @@ if userToken.matchID != -1 and userToken.actionID != actions.MULTIPLAYING and us
 		userToken.autopiloting = True
 		userToken.relaxing = False
 		userToken.ScoreV2 = False
+		userToken.lastMod = userToken.currentMod
+		userToken.currentMod = 'Autopilot'
 		if userToken.actionID in (0, 1, 14):
 			UserText = packetData["actionText"] + "on Autopilot"
 		else:
 			UserText = packetData["actionText"] + " on Autopilot"
 		userToken.actionText = UserText
 		userToken.updateCachedStats()
-		if userToken.specialMod == False:
-			userToken.specialMod = True
+		if userToken.currentMod != userToken.lastMod:
 			userToken.enqueue(serverPackets.notification("You're playing with Autopilot, we've changed the leaderboard to Autopilot."))
 
 	# score v2
@@ -81,24 +83,27 @@ if userToken.matchID != -1 and userToken.actionID != actions.MULTIPLAYING and us
 		userToken.autopiloting = False
 		userToken.relaxing = False
 		userToken.ScoreV2 = True
+		userToken.lastMod = userToken.currentMod
+		userToken.currentMod = 'ScoreV2'
 		if userToken.actionID in (0, 1, 14):
 			UserText = packetData["actionText"] + "on ScoreV2"
 		else:
 			UserText = packetData["actionText"] + " on ScoreV2"
 		userToken.actionText = UserText
 		userToken.updateCachedStats()
-		if userToken.specialMod == False:
-			userToken.specialMod = True
+		if userToken.currentMod != userToken.lastMod:
 			userToken.enqueue(serverPackets.notification("You're playing with ScoreV2, we've changed the leaderboard to ScoreV2."))
 
 	else:
 		userToken.relaxing = False
 		userToken.autopiloting = False
+		userToken.ScoreV2 = False
+		userToken.lastMod = userToken.currentMod
+		userToken.currentMod = 'Regular'
 		UserText = packetData["actionText"]
 		userToken.actionText = UserText
 		userToken.updateCachedStats()
-		if userToken.specialMod == True:
-			userToken.specialMod = False
+		if userToken.currentMod != userToken.lastMod:
 			userToken.enqueue(serverPackets.notification("You're playing in regular mode. We've changed back to the Regular leaderboard."))
 
 	glob.db.execute("UPDATE users_stats SET current_status = %s WHERE id = %s", [UserText, userID])
