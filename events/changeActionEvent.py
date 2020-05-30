@@ -60,7 +60,7 @@ if userToken.matchID != -1 and userToken.actionID != actions.MULTIPLAYING and us
 		userToken.actionText = UserText
 		userToken.updateCachedStats()
 		if userToken.currentMod != userToken.lastMod:
-			userToken.enqueue(serverPackets.notification("You're playing with Relax, we've changed the leaderboard to Relax."))
+			userToken.enqueue(serverPackets.notification("You're playing with Relax"))
 
 	# autopiloten
 	elif bool(packetData["actionMods"] & 8192) == True:
@@ -76,7 +76,7 @@ if userToken.matchID != -1 and userToken.actionID != actions.MULTIPLAYING and us
 		userToken.actionText = UserText
 		userToken.updateCachedStats()
 		if userToken.currentMod != userToken.lastMod:
-			userToken.enqueue(serverPackets.notification("You're playing with Autopilot, we've changed the leaderboard to Autopilot."))
+			userToken.enqueue(serverPackets.notification("You're playing with Autopilot"))
 
 	# score v2
 	elif bool(packetData["actionMods"] & 536870912) == True:
@@ -92,7 +92,7 @@ if userToken.matchID != -1 and userToken.actionID != actions.MULTIPLAYING and us
 		userToken.actionText = UserText
 		userToken.updateCachedStats()
 		if userToken.currentMod != userToken.lastMod:
-			userToken.enqueue(serverPackets.notification("You're playing with ScoreV2, we've changed the leaderboard to ScoreV2."))
+			userToken.enqueue(serverPackets.notification("You're playing with ScoreV2"))
 
 	else:
 		userToken.relaxing = False
@@ -104,7 +104,7 @@ if userToken.matchID != -1 and userToken.actionID != actions.MULTIPLAYING and us
 		userToken.actionText = UserText
 		userToken.updateCachedStats()
 		if userToken.currentMod != userToken.lastMod:
-			userToken.enqueue(serverPackets.notification("You're playing in regular mode. We've changed back to the Regular leaderboard."))
+			userToken.enqueue(serverPackets.notification("You're playing in regular mode"))
 
 	glob.db.execute("UPDATE users_stats SET current_status = %s WHERE id = %s", [UserText, userID])
 	# Enqueue our new user panel and stats to us and our spectators
