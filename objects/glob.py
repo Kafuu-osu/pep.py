@@ -18,7 +18,7 @@ except:
 	VERSION = "Unknown"
 
 DATADOG_PREFIX = "peppy"
-BOT_NAME = "AC"
+BOT_NAME = "ChinoBot"
 # YOU CAN CHANGE TO YOUR BOT NAME! #
 application = None
 db = None

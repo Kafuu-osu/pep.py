@@ -9,7 +9,7 @@ from constants import serverPackets
 from objects import glob
 
 # Tillerino np regex, compiled only once to increase performance
-npRegex = re.compile("^https?:\\/\\/osu\\.ppy\\.sh\\/b\\/(\\d*)")
+npRegex = re.compile("^https?:\\/\\/old\\.ppy\\.sh\\/b\\/(\\d*)")
 
 def connect():
 	"""
@@ -20,14 +20,14 @@ def connect():
 	glob.BOT_NAME = userUtils.getUsername(999)
 	token = glob.tokens.addToken(999)
 	token.actionID = actions.IDLE
-	token.actionText = "\nWelcome to RealistikOsu!"
-	token.pp = 69
-	token.accuracy = 0.69
-	token.playcount = 69
-	token.totalScore = 1337
+	token.actionText = "\nWelcome to osu!Kafuu~~"
+	token.pp = 7800
+	token.accuracy = 0.997
+	token.playcount = 2000
+	token.totalScore = 940857703
 	token.timeOffset = 0
-	token.timezone = 24 + 2
-	token.country = 2 #this is retared, fuck it im keeping it as europe, couldnt find the uk as its ordered stupidly
+	token.timezone = 24 + 8
+	token.country = 48 #this is retared, fuck it im keeping it as europe, couldnt find the uk as its ordered stupidly
 	glob.streams.broadcast("main", serverPackets.userPanel(999))
 	glob.streams.broadcast("main", serverPackets.userStats(999))
 

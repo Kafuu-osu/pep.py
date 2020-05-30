@@ -58,6 +58,8 @@ from helpers import packetHelper
 from objects import glob
 from common.sentry import sentry
 
+with open('../templates/default.html', 'r', encoding='utf-8') as read_file:
+	default_page = read_file.read()
 
 class handler(requestsManager.asyncRequestHandler):
 	@tornado.web.asynchronous
@@ -243,5 +245,4 @@ class handler(requestsManager.asyncRequestHandler):
 	@tornado.web.asynchronous
 	@tornado.gen.engine
 	def asyncGet(self):
-		#Yes. I just wrote the credit... in it.
-		self.redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+		self.write(default_page)
