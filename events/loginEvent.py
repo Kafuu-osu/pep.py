@@ -151,12 +151,12 @@ def handle(tornadoRequest):
 			raise exceptions.banchoRestartingException()
 
 		# Send login notification before maintenance message
-		#if glob.banchoConf.config["loginNotification"] != "":
+		loginNotification = glob.banchoConf.config["loginNotification"]
+
 
 		#creating notification
 		OnlineUsers = int(glob.redis.get("ripple:online_users").decode("utf-8"))
-		Notif = f"""- Online Users: {OnlineUsers}
-		- {random.choice(glob.banchoConf.config['Quotes'])}"""
+		Notif = "- Online Users: {}\n- {}".format(OnlineUsers, loginNotification) # - {random.choice(glob.banchoConf.config['Quotes'])}
 		responseToken.enqueue(serverPackets.notification(Notif))
 
 		# Maintenance check
