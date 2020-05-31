@@ -319,7 +319,7 @@ if __name__ == "__main__":
 		}).start()
 
 		# Start tornado
-		glob.application.listen(serverPort)
+		glob.application.listen(serverPort, address="127.0.0.1", xheaders=True)
 		tornado.ioloop.IOLoop.instance().start()
 	finally:
 		system.dispose()
