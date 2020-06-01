@@ -25,26 +25,16 @@ def bloodcatMessage(beatmapID):
 	beatmap = glob.db.fetch("SELECT song_name, beatmapset_id FROM beatmaps WHERE beatmap_id = %s LIMIT 1", [beatmapID])
 	if beatmap is None:
 		return "Sorry, I'm not able to provide a download link for this map :("
-	return "Download [https://bloodcat.com/osu/s/{} {}] from Bloodcat".format(
+	return "Download [https://bloodcat.com/osu/s/{} from Bloodcat]".format(
 		beatmap["beatmapset_id"],
-		beatmap["song_name"],
 	)
 
-def beatconnectMessage(beatmapID):
-	beatmap = glob.db.fetch("SELECT song_name, beatmapset_id FROM beatmaps WHERE beatmap_id = %s LIMIT 1", [beatmapID])
-	if beatmap is None:
-		return "Sorry, I'm not able to provide a download link for this map :("
-	return "Download [https://beatconnect.io/b/{} {}] from Beatconnect".format(
-		beatmap["beatmapset_id"],
-		beatmap["song_name"],
-	)
-	
+
 def mirrorMessage(beatmapID):
 	beatmap = glob.db.fetch("SELECT song_name, beatmapset_id FROM beatmaps WHERE beatmap_id = %s LIMIT 1", [beatmapID])
 	if beatmap is None:
 		return "Sorry, I'm not able to provide a download link for this map :("
-	return "Download {} from [https://beatconnect.io/b/{} Beatconnect], [https://bloodcat.com/osu/s/{} Bloodcat] or [osu://dl/{} osu!direct].".format(
-		beatmap["song_name"],
+	return "Download {} from [https://bloodcat.com/osu/s/{} Bloodcat] [https://txy1.sayobot.cn/beatmaps/download/novideo/${} Sayobot.cn (Recommended for users in Mainland China)] or [osu://dl/{} osu!direct].".format(
 		beatmap["beatmapset_id"],
 		beatmap["beatmapset_id"],
 		beatmap["beatmapset_id"],
@@ -174,7 +164,7 @@ def kick(fro, chan, message):
 def fokabotReconnect(fro, chan, message):
 	# Check if the bot is already connected
 	if glob.tokens.getTokenFromUserID(999) is not None:
-		return "{} is already connected to RealistikOsu!".format(glob.BOT_NAME)
+		return "{} is already connected to osu!Kafuu".format(glob.BOT_NAME)
 
 	# Bot is not connected, connect it
 	fokabot.connect()
@@ -398,7 +388,7 @@ def systemStatus(fro, chan, message):
 		letsVersion = letsVersion.decode("utf-8")
 	msg = "pep.py bancho server v{}\n".format(glob.VERSION)
 	msg += "LETS scores server\n"
-	msg += "RealistikOsu! version\n"
+	msg += "osu!Kafuu version\n"
 	msg += "\n"
 	msg += "=== BANCHO STATS ===\n"
 	msg += "Connected users: {}\n".format(data["connectedUsers"])
@@ -426,7 +416,7 @@ def getPPMessage(userID, just_data = False):
 		currentAcc = token.tillerino[2]
 
 		# Send request to LETS api
-		url = "{}/v1/pp?b={}&m={}".format(glob.conf.config["server"]["letsapiurl"].rstrip("/"), currentMap, currentMods)
+		url = "{}/v1/pp?b={}&m={}&a={}".format(glob.conf.config["server"]["letsapiurl"].rstrip("/"), currentMap, currentMods, currentAcc)
 		resp = requests.get(url, timeout=10)
 		try:
 			assert resp is not None
@@ -456,7 +446,7 @@ def getPPMessage(userID, just_data = False):
 		if currentAcc == -1:
 			msg += "95%: {pp95}pp | 98%: {pp98}pp | 99% {pp99}pp | 100%: {pp100}pp".format(pp100=round(data["pp"][0], 2), pp99=round(data["pp"][1], 2), pp98=round(data["pp"][2], 2), pp95=round(data["pp"][3], 2))
 		else:
-			msg += "{acc:.2f}%: {pp}pp".format(acc=token.tillerino[2], pp=round(data["pp"][0], 2))
+			msg += "{acc:.2f}%: {pp}pp".format(acc=currentAcc, pp=round(data["pp"][-1], 2))
 		
 		originalAR = data["ar"]
 		# calc new AR if HR/EZ is on
@@ -484,60 +474,62 @@ def getPPMessage(userID, just_data = False):
 	#	return False
 
 def tillerinoNp(fro, chan, message):
-	try:
-		# Mirror list trigger for #spect_
-		if chan.startswith("#spect_"):
-			spectatorHostUserID = getSpectatorHostUserIDFromChannel(chan)
-			spectatorHostToken = glob.tokens.getTokenFromUserID(spectatorHostUserID, ignoreIRC=True)
-			if spectatorHostToken is None:
-				return False
-			return mirrorMessage(spectatorHostToken.beatmapID)
-
-		# Run the command in PM only
-		if chan.startswith("#"):
+	# Mirror list trigger for #spect_
+	if chan.startswith("#spect_"):
+		spectatorHostUserID = getSpectatorHostUserIDFromChannel(chan)
+		spectatorHostToken = glob.tokens.getTokenFromUserID(spectatorHostUserID, ignoreIRC=True)
+		if spectatorHostToken is None:
 			return False
-
-		playWatch = message[1] == "playing" or message[1] == "watching"
-		# Get URL from message
-		if message[1] == "listening":
-			beatmapURL = str(message[3][1:])
-		elif playWatch:
-			beatmapURL = str(message[2][1:])
-		else:
-			return False
-
-		modsEnum = 0
-		mapping = {
-			"-Easy": mods.EASY,
-			"-NoFail": mods.NOFAIL,
-			"+Hidden": mods.HIDDEN,
-			"+HardRock": mods.HARDROCK,
-			"+Nightcore": mods.NIGHTCORE,
-			"+DoubleTime": mods.DOUBLETIME,
-			"-HalfTime": mods.HALFTIME,
-			"+Flashlight": mods.FLASHLIGHT,
-			"-SpunOut": mods.SPUNOUT
-		}
-
-		if playWatch:
-			for part in message:
-				part = part.replace("\x01", "")
-				if part in mapping.keys():
-					modsEnum += mapping[part]
-
-		# Get beatmap id from URL
-		beatmapID = fokabot.npRegex.search(beatmapURL).groups(0)[0]
-
-		# Update latest tillerino song for current token
-		token = glob.tokens.getTokenFromUsername(fro)
-		if token is not None:
-			token.tillerino = [int(beatmapID), modsEnum, -1.0]
-		userID = token.userID
-
-		# Return tillerino message
-		return getPPMessage(userID)
-	except:
+		return mirrorMessage(spectatorHostToken.beatmapID)
+	# Run the command in PM only
+	if chan.startswith("#"):
 		return False
+
+	playWatch = message[1] == "playing" or message[1] == "watching"
+	# Get URL from message
+	if message[1] == "listening":
+		beatmapURL = str(message[3][1:])
+	elif playWatch:
+		beatmapURL = str(message[2][1:])
+	else:
+		return False
+
+	modsEnum = 0
+	mapping = {
+		"-Easy": mods.EASY,
+		"-NoFail": mods.NOFAIL,
+		"+Hidden": mods.HIDDEN,
+		"+HardRock": mods.HARDROCK,
+		"+Nightcore": mods.NIGHTCORE,
+		"+DoubleTime": mods.DOUBLETIME,
+		"-HalfTime": mods.HALFTIME,
+		"+Flashlight": mods.FLASHLIGHT,
+		"-SpunOut": mods.SPUNOUT
+	}
+
+	if playWatch:
+		for part in message:
+			part = part.replace("\x01", "")
+			if part in mapping.keys():
+				modsEnum += mapping[part]
+
+	log.info("[fokabot] tillerino /np get beatmapURL {}".format(beatmapURL))
+	# Get beatmap id from URL
+	regexResult = fokabot.npRegex.search(beatmapURL)
+
+	if regexResult == None:
+		return "are you sure it is a beatmap..?"
+
+	beatmapID = regexResult.groups(0)[0]
+
+	# Update latest tillerino song for current token
+	token = glob.tokens.getTokenFromUsername(fro)
+	if token is not None:
+		token.tillerino = [int(beatmapID), modsEnum, -1.0]
+	userID = token.userID
+
+	# Return tillerino message
+	return getPPMessage(userID)
 
 
 def tillerinoMods(fro, chan, message):
@@ -614,6 +606,8 @@ def tillerinoAcc(fro, chan, message):
 
 		# Convert acc to float
 		acc = float(message[0])
+		if acc <= 0 or acc > 100:
+			return "acc must be greater than 0 and less than 100."
 
 		# Set new tillerino list acc value
 		token.tillerino[2] = acc
@@ -621,7 +615,7 @@ def tillerinoAcc(fro, chan, message):
 		# Return tillerino message for that beatmap with mods
 		return getPPMessage(userID)
 	except ValueError:
-		return "Invalid acc value"
+		return "acc must be a number, such as: 99.80 or 99"
 	except:
 		return False
 
@@ -1376,27 +1370,6 @@ def bloodcat(fro, chan, message):
 		beatmapID = spectatorHostToken.beatmapID
 	return bloodcatMessage(beatmapID)
 
-def beatconnect(fro, chan, message):
-	try:
-		matchID = getMatchIDFromChannel(chan)
-	except exceptions.wrongChannelException:
-		matchID = None
-	try:
-		spectatorHostUserID = getSpectatorHostUserIDFromChannel(chan)
-	except exceptions.wrongChannelException:
-		spectatorHostUserID = None
-
-	if matchID is not None:
-		if matchID not in glob.matches.matches:
-			return "This match doesn't seem to exist... Or does it...?"
-		beatmapID = glob.matches.matches[matchID].beatmapID
-	else:
-		spectatorHostToken = glob.tokens.getTokenFromUserID(spectatorHostUserID, ignoreIRC=True)
-		if spectatorHostToken is None:
-			return "The spectator host is offline."
-		beatmapID = spectatorHostToken.beatmapID
-	return beatconnectMessage(beatmapID)
-
 def mirror(fro, chan, message):
 	try:
 		matchID = getMatchIDFromChannel(chan)
@@ -1594,14 +1567,10 @@ commands = [
 		"trigger": "!bloodcat",
 		"callback": bloodcat
 	}, {
-		"trigger": "!beatconnect",
-		"callback": beatconnect
+		"trigger": "!acc",
+		"callback": tillerinoAcc,
+		"syntax": "<accuarcy>"
 	}
-	#
-	#	"trigger": "!acc",
-	#	"callback": tillerinoAcc,
-	#	"syntax": "<accuarcy>"
-	#}
 ]
 
 # Commands list default values
