@@ -396,6 +396,9 @@ class token:
 		:param author: userID of who has silenced the user. Default: 999 (Your Bot Name lol)
 		:return:
 		"""
+		if self.userID in [1000]:
+			log.info("You can't silence me.")
+			return None
 		if seconds is None:
 			# Get silence expire from db if needed
 			seconds = max(0, userUtils.getSilenceEnd(self.userID) - int(time.time()))
