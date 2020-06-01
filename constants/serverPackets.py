@@ -16,7 +16,7 @@ def forceUpdate():
 
 def loginBanned():
 	packets = packetHelper.buildPacket(packetIDs.server_userID, [[-1, dataTypes.SINT32]])
-	packets += notification("You are banned! You can appeal 3 months after your ban on Discord (invite available at ussr.pl)")
+	packets += notification("You are banned! You can appeal 3 months after your ban (contact PurePeace)")
 	return packets
 
 def loginLocked():

@@ -274,9 +274,13 @@ def sendMessage(fro = "", to = "", message = "", token = None, toIRC = True):
 			# Everything seems fine, send packet
 			recipientToken.enqueue(packet)
 
+		# why i do this? beacuse i should do this
+		#try: message = message.encode('latin-1').decode('utf-8')
+		#except: pass
+
 		# Send the message to IRC
 		if glob.irc and toIRC:
-			messageSplitInLines = message.encode("latin-1").decode("utf-8").split("\n")
+			messageSplitInLines = message.split("\n")
 			for line in messageSplitInLines:
 				if line == messageSplitInLines[:1] and line == "":
 					continue
@@ -294,8 +298,8 @@ def sendMessage(fro = "", to = "", message = "", token = None, toIRC = True):
 
 		# File and discord logs (public chat only)
 		if to.startswith("#") and not (message.startswith("\x01ACTION is playing") and to.startswith("#spect_")):
-			log.chat("{fro} @ {to}: {message}".format(fro=token.username, to=to, message=message.encode("latin-1").decode("utf-8")))
-			glob.schiavo.sendChatlog("**{fro} @ {to}:** {message}".format(fro=token.username, to=to, message=message.encode("latin-1").decode("utf-8")))
+			log.chat("{fro} @ {to}: {message}".format(fro=token.username, to=to, message=message))
+			glob.schiavo.sendChatlog("**{fro} @ {to}:** {message}".format(fro=token.username, to=to, message=message))
 		return 0
 	except exceptions.userSilencedException:
 		token.enqueue(serverPackets.silenceEndTime(token.getSilenceSecondsLeft()))

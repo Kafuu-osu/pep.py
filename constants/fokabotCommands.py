@@ -88,8 +88,8 @@ def roll(fro, chan, message):
 	points = random.randrange(0,maxPoints)
 	return "{} rolls {} points!".format(fro, str(points))
 
-#def ask(fro, chan, message):
-#	return random.choice(["yes", "no", "maybe"])
+def ask(fro, chan, message):
+	return random.choice(["yes", "no", "maybe"])
 
 def alert(fro, chan, message):
 	msg = ' '.join(message[:]).strip()
@@ -1391,6 +1391,17 @@ def mirror(fro, chan, message):
 		beatmapID = spectatorHostToken.beatmapID
 	return mirrorMessage(beatmapID)
 	
+
+def commandHelp():
+	help = """
+	我能帮到你吗？也许不能。。(help)[https://kafuu.pro]
+	呃
+	呃
+	呃
+	"""
+	return help
+
+
 """
 Commands list
 
@@ -1413,7 +1424,7 @@ commands = [
 		"callback": report
 	}, {
 		"trigger": "!help",
-		"response": "Click (here)[https://ussr.pl/doc/4] for full command list"
+		"response": commandHelp()
 	}, {
 		"trigger": "!ppboard",
 		"syntax": "<relax/vanilla>",
@@ -1432,12 +1443,11 @@ commands = [
 		"syntax": "<announcement>",
 		"privileges": privileges.ADMIN_SEND_ALERTS,
 		"callback": postAnnouncement
-	},	#{
-		#"trigger": "!ask",
-		#"syntax": "<question>",
-		#"callback": ask
-	#}, {
-	{
+	},	{
+		"trigger": "!ask",
+		"syntax": "<question>",
+		"callback": ask
+	}, {
 		"trigger": "!map",
 		"syntax": "<rank/unrank> <set/map> <ID>",
 		"privileges": privileges.ADMIN_MANAGE_BEATMAPS,

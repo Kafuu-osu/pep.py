@@ -29,8 +29,8 @@ class handler(requestsManager.asyncRequestHandler):
 
 			chatHelper.sendMessage(
 				glob.BOT_NAME,
-				self.get_argument("to").encode().decode("ASCII", "ignore"),
-				self.get_argument("msg").encode().decode("ASCII", "ignore")
+				self.get_argument("to").encode().decode("utf-8", "replace"),
+				self.get_argument("msg").encode().decode("utf-8", "replace")
 			)
 
 			# Status code and message
