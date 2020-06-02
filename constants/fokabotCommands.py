@@ -62,17 +62,17 @@ def instantRestart(fro, chan, message):
 def faq(fro, chan, message):
 	# TODO: Unhardcode this
 	messages = {
-		"rules": "Please make sure to check (RealistikOsu! rules)[https://ussr.pl/doc/rules].",
+		"rules": "Please make sure to check (osuKafuu! rules)[https://ussr.pl/doc/rules].",
 		"swearing": "Please don't abuse swearing",
 		"spam": "Please don't spam",
 		"offend": "Please don't offend other players",
-		"github": "(RealistikOsu! Github page!)[https://github.com/RealistikOsu]",
-		"discord": "(Join RealistikOsu Discord!)[https://discord.gg/87E2K46]",
-		"changelog": "Check our (git repo)[https://github.com/RealistikOsu] for changes!",
+		"github": "(osuKafuu! Github page!)[https://github.com/osuKafuu]",
+		"discord": "(Join osuKafuu Discord!)[https://discord.gg/87E2K46]",
+		"changelog": "Check our (git repo)[https://github.com/osuKafuu] for changes!",
 		"english": "Please keep this channel in english.",
 		"topic": "Can you please drop the topic and talk about something else?",
 		"lines": "Please try to keep your sentences on a single line to avoid getting silenced.",
-		"cheating": "Hacking is not permitted on RealistikOsu! If you spot someone cheating, report them to the staff or RealistikDash."
+		"cheating": "Hacking is not permitted on osuKafuu! If you spot someone cheating, report them to the staff or RealistikDash."
 	}
 	key = message[0].lower()
 	if key not in messages:

@@ -31,7 +31,7 @@ def loginCheats():
 	message = "BOT Chet spotted!"
 	packets = packetHelper.buildPacket(packetIDs.server_userID, [[-1, dataTypes.SINT32]])
 	packets += packetHelper.buildPacket(0x69, [[message, dataTypes.STRING]])
-	packets += notification("We don't like cheaters here at RealistikOsu! Consider yourself restricted.")
+	packets += notification("We don't like cheaters here at osuKafuu! Consider yourself restricted.")
 	return packets
 
 def needSupporter():

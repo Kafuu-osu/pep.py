@@ -241,6 +241,15 @@ if __name__ == "__main__":
 		if glob.debug:
 			consoleHelper.printColored("[!] Warning! Server running in debug mode!", bcolors.YELLOW)
 
+		# Multiaccount
+		MA_allowed = glob.conf.extra["multiaccount"]["allowed"]
+		MA_count = glob.conf.extra["multiaccount"]["count"]
+		MA_overlimit = glob.conf.extra["multiaccount"]["overlimit"]
+		consoleHelper.printColored("[!] Notice! Multiaccount is {}!".format("ALOWED" if MA_allowed == True else "NOT ALLOWED"), bcolors.RED)
+		if MA_allowed == True:
+			consoleHelper.printColored("[!] Notice! Multiaccount limit count is {}!".format(MA_count), bcolors.RED)
+			consoleHelper.printColored("[!] Notice! Multiaccount overlimit handler is {}!".format(MA_overlimit), bcolors.RED)
+
 		# Make app
 		glob.application = make_app()
 

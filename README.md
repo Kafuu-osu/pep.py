@@ -1,5 +1,5 @@
 ## pep.py
-The Bancho RealistikOsu uses (pased on Ainu's version of pep.py by Ripple) It handles:
+The Bancho osuKafuu uses (pased on Ainu's version of pep.py by Ripple) It handles:
 - Client login
 - Online users listing and statuses
 - Public and private chat
