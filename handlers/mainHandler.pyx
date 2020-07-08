@@ -12,6 +12,7 @@ from common.web import requestsManager
 from constants import exceptions
 from constants import packetIDs
 from constants import serverPackets
+from constants import clientPackets
 from events import cantSpectateEvent
 from events import changeActionEvent
 from events import changeMatchModsEvent
@@ -58,8 +59,6 @@ from helpers import packetHelper
 from objects import glob
 from common.sentry import sentry
 
-with open('templates/default.html', 'r', encoding='utf-8') as read_file:
-	default_page = read_file.read()
 
 class handler(requestsManager.asyncRequestHandler):
 	@tornado.web.asynchronous
@@ -182,7 +181,25 @@ class handler(requestsManager.asyncRequestHandler):
 					if packetID != 4:
 						if packetID in eventHandler:
 							if not userToken.restricted or (userToken.restricted and packetID in packetsRestricted):
+								# Get event name
+								event = packetDict.get(packetID, 'unknownEvent({})'.format(packetID))
+								# Try to unpack packet data
+								unpackedData = unpackPacket(event, packetData)
+								log.info("event: {}, user: {}, packetData: {}".format(
+										event, 
+										'{}({})'.format(userToken.username, userToken.userID), 
+										unpackedData
+									)
+								)
+								# Handle event
 								eventHandler[packetID]()
+
+								# Send the socketio message
+								if glob.sio and event not in excludeEvents:
+									afterHandlerToken = glob.tokens.getTokenFromUserID(userToken.userID) or userToken
+									userData = {
+										k: str(v) if isinstance(v, bytes) else v for k, v in afterHandlerToken.__dict__.items() if type(v) in dataTypes}
+									glob.sio.send(event, {'packetData': unpackedData}, userData=userData)
 							else:
 								log.warning("Ignored packet id from {} ({}) (user is restricted)".format(requestTokenString, packetID))
 						else:
@@ -246,3 +263,49 @@ class handler(requestsManager.asyncRequestHandler):
 	@tornado.gen.engine
 	def asyncGet(self):
 		self.write(default_page)
+
+
+def getPacketDict(module):
+	def fix(name: str):
+		arr, res = name.split('_'), ''
+		for i in arr[1:]: res += i[0].upper() + i[1:]
+		return arr[0] + res
+	
+	names = [i for i in dir(module) if not i.startswith('__')]
+	return dict(zip([getattr(module, n) for n in names], map(fix, names)))
+
+
+def unpackPacket(event, packet):
+	fixEvents = {
+		'ChangeAction': 'userActionChange',
+		'friendAdd': 'addRemoveFriend',
+		'friendRemove': 'addRemoveFriend',
+		'changeMatchPassword': 'changeMatchSettings',
+		'changeMatchMods': 'changeMods',
+		'matchLock': 'lockSlot',
+		'changeMatchSettings': 'changeMatchSettings'
+	}
+	for k, i in fixEvents.items():
+		if k.lower() in event.lower(): return getattr(clientPackets, i)(packet)
+	for i in unpackMethods:
+		if i.lower() in event.lower(): return getattr(clientPackets, i)(packet)
+	return str(packet) if isinstance(packet, bytes) else packet
+
+
+# template html
+with open('templates/default.html', 'r', encoding='utf-8') as read_file:
+	default_page = read_file.read()
+
+# packet name dict
+packetDict = getPacketDict(packetIDs)
+
+# unpack methods
+unpackMethods = tuple(i for i in dir(clientPackets) if not i.startswith('__') and callable(getattr(clientPackets, i)))
+
+# dataTypes
+dataTypes = (tuple, list, dict, set, str, int, float, bytes)
+
+# exclude events
+excludeEvents = (
+	'unknownEvent'
+)

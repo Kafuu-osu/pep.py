@@ -19,6 +19,7 @@ from common.ddog import datadogClient
 from common.log import logUtils as log
 from common.redis import pubSub
 from common.web import schiavo
+from common import socketioService
 from handlers import apiFokabotMessageHandler
 from handlers import apiGetTheFuckOuttaHere
 from handlers import apiIsOnlineHandler
@@ -245,10 +246,26 @@ if __name__ == "__main__":
 		MA_allowed = glob.conf.extra["multiaccount"]["allowed"]
 		MA_count = glob.conf.extra["multiaccount"]["count"]
 		MA_overlimit = glob.conf.extra["multiaccount"]["overlimit"]
-		consoleHelper.printColored("[!] Notice! Multiaccount is {}!".format("ALOWED" if MA_allowed == True else "NOT ALLOWED"), bcolors.RED)
+		consoleHelper.printColored("[!] Multiaccount is {}!".format("ALOWED" if MA_allowed == True else "NOT ALLOWED"), bcolors.YELLOW)
 		if MA_allowed == True:
-			consoleHelper.printColored("[!] Notice! Multiaccount limit count is {}!".format(MA_count), bcolors.RED)
-			consoleHelper.printColored("[!] Notice! Multiaccount overlimit handler is {}!".format(MA_overlimit), bcolors.RED)
+			consoleHelper.printColored("[!] Multiaccount limit count is {}!".format(MA_count), bcolors.YELLOW)
+			consoleHelper.printColored("[!] Multiaccount overlimit handler is {}!".format(MA_overlimit), bcolors.YELLOW)
+		
+		# Connect to socketio
+		SIO_enabled = glob.conf.extra["socketio"]["enabled"]
+		SIO_server = glob.conf.extra["socketio"]["server"]
+		consoleHelper.printColored("[!] Socketio service is {}! ({})".format("ENABLED" if SIO_enabled == True else "DISABLED", SIO_server), bcolors.GREEN)
+		if SIO_enabled:
+			try:
+				consoleHelper.printNoNl("> Connecting to socketio server... \n")
+				glob.sio = socketioService.Client(SIO_server)
+				consoleHelper.printNoNl(" ")
+				consoleHelper.printDone()
+			except Exception as err:
+				# Exception while connecting to db
+				consoleHelper.printError()
+				consoleHelper.printColored("[!] Error while connection to socketio server.", bcolors.RED)
+
 
 		# Make app
 		glob.application = make_app()

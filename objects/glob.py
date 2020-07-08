@@ -47,6 +47,8 @@ sentry = False
 irc = False
 restarting = False
 
+sio = None
+
 startTime = int(time.time())
 
 streams = streamList.streamList()

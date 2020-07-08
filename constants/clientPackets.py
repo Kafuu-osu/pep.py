@@ -47,6 +47,9 @@ def setAwayMessage(stream):
 		["awayMessage", dataTypes.STRING]
 	])
 
+def blockDM(stream):
+	return packetHelper.readPacketData(stream, [["value", dataTypes.UINT32]])
+
 def channelJoin(stream):
 	return packetHelper.readPacketData(stream, [["channel", dataTypes.STRING]])
 
