@@ -9,3 +9,4 @@ redistest.py
 *.so
 .pyenv
 nohup.out
+setup.py

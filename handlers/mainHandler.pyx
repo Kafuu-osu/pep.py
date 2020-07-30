@@ -303,7 +303,7 @@ packetDict = getPacketDict(packetIDs)
 unpackMethods = tuple(i for i in dir(clientPackets) if not i.startswith('__') and callable(getattr(clientPackets, i)))
 
 # dataTypes
-dataTypes = (tuple, list, dict, set, str, int, float, bytes)
+dataTypes = (tuple, list, dict, str, int, float, bool, set, bytes)
 
 # exclude events
 excludeEvents = (
