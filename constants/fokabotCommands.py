@@ -969,8 +969,8 @@ def multiplayer(fro, chan, message):
 			raise exceptions.invalidUserException("That user is not connected to bancho right now.")
 		_match = glob.matches.matches[getMatchIDFromChannel(chan)]
 		_match.invite(999, userID)
-		token.enqueue(serverPackets.notification("Please accept the invite you've just received from {} to "
-												 "enter your tourney match.".format(glob.BOT_NAME)))
+		token.enqueue(serverPackets.notification("Please accept the invite you've just received from {} to enter your tourney match.".format(glob.BOT_NAME))
+                )
 		return "An invite to this match has been sent to {}".format(username)
 
 	def mpMap():
@@ -1393,12 +1393,11 @@ def mirror(fro, chan, message):
 	
 
 def commandHelp():
-	help = """
-	我能帮到你吗？也许不能。。(help)[https://kafuu.pro]
-	呃
-	呃
-	呃
-	"""
+	help = "\n".join(
+		(f"{i.get('trigger')}" + 
+		(f" {i.get('syntax')}" if i.get('syntax') else "")
+		for i in commands if "!" in i.get("trigger"))
+	)
 	return help
 
 
@@ -1422,9 +1421,6 @@ commands = [
 	}, {
 		"trigger": "!report",
 		"callback": report
-	}, {
-		"trigger": "!help",
-		"response": commandHelp()
 	}, {
 		"trigger": "!ppboard",
 		"syntax": "<relax/vanilla>",
@@ -1589,3 +1585,11 @@ for cmd in commands:
 	cmd.setdefault("privileges", None)
 	cmd.setdefault("callback", None)
 	cmd.setdefault("response", "u w0t m8?")
+
+commands.append({
+	"trigger": "!help",
+ 	"privileges": None,
+	"response": commandHelp(),
+	"syntax": "",
+	"callback": None
+})

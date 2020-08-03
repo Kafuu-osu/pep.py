@@ -35,7 +35,7 @@ class banchoConfig:
 		if mainMenuIcon is None:
 			self.config["menuIcon"] = ""
 		else:
-			imageURL = "https://i.ppy.sh/{}.png".format(mainMenuIcon["file_id"])
+			imageURL = "https://i.kafuu.pro/{}.png".format(mainMenuIcon["file_id"])
 			self.config["menuIcon"] = "{}|{}".format(imageURL, mainMenuIcon["url"])
 		self.config["loginNotification"] = glob.db.fetch("SELECT value_string FROM bancho_settings WHERE name = 'login_notification'")["value_string"]
 		# self.config["Quotes"] = [

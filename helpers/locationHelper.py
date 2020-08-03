@@ -17,7 +17,7 @@ def getCountry(ip):
 		result = json.loads(urllib.request.urlopen("{}/{}".format(glob.conf.config["localize"]["ipapiurl"], ip), timeout=3).read().decode())["country"]
 		return result.upper()
 	except:
-		log.error("Error in get country")
+		log.error(f"Error in get country, ip: {ip}")
 		return "XX"
 
 def getLocation(ip):
@@ -32,5 +32,5 @@ def getLocation(ip):
 		result = json.loads(urllib.request.urlopen("{}/{}".format(glob.conf.config["localize"]["ipapiurl"], ip), timeout=3).read().decode())["loc"].split(",")
 		return float(result[0]), float(result[1])
 	except:
-		log.error("Error in get position")
+		log.error(f"Error in get position, ip: {ip}")
 		return 0, 0

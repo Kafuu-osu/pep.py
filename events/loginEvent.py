@@ -16,11 +16,21 @@ from objects import glob
 
 import random
 
+
+
+
+
 def handle(tornadoRequest):
+	country=atitude=longitude=userID=osuVersion=requestIP = ""
+	clientData = []
+ 
 	# Data to return
 	responseToken = None
 	responseTokenString = "ayy"
 	responseData = bytes()
+ 
+	def saveLoginRecord(status, note=""):
+		userUtils.saveLoginRecord(userID, osuVersion, requestIP, status, country, latitude, longitude, clientData=clientData, note=note)
 
 	# Get IP from tornado request
 	requestIP = tornadoRequest.getRequestIP()
@@ -105,6 +115,10 @@ def handle(tornadoRequest):
 
 		# Log user osuver
 		kotrikhelper.setUserLastOsuVer(userID, osuVersion)
+		log.info("User {}({}) login, client ver: {}, ip: {}".format(username, userID, osuVersion, requestIP))
+  
+  
+
 
 		# Delete old tokens for that user and generate a new one
 		isTournament = "tourney" in osuVersion
@@ -118,11 +132,12 @@ def handle(tornadoRequest):
 
 		# Send message if donor expires soon
 		if responseToken.privileges & privileges.USER_DONOR > 0:
-			expireDate = userUtils.getDonorExpire(responseToken.userID)
-			if expireDate-int(time.time()) <= 86400*3:
-				expireDays = round((expireDate-int(time.time()))/86400)
-				expireIn = "{} days".format(expireDays) if expireDays > 1 else "less than 24 hours"
-				responseToken.enqueue(serverPackets.notification("Your donor tag expires in {}! When your donor tag expires, you won't have any of the donor privileges, like yellow username, custom badge and discord custom role and username color! If you wish to keep supporting Ripple and you don't want to lose your donor privileges, you can donate again by clicking on 'Support us' on Ripple's website.".format(expireIn)))
+			responseToken.enqueue(serverPackets.notification("欢迎您，高贵的撒泼特"))
+			#expireDate = userUtils.getDonorExpire(responseToken.userID)
+			#if expireDate-int(time.time()) <= 86400*3:
+			#	expireDays = round((expireDate-int(time.time()))/86400)
+			#	expireIn = "{} days".format(expireDays) if expireDays > 1 else "less than 24 hours"
+			#	responseToken.enqueue(serverPackets.notification("Your donor tag expires in {}! When your donor tag expires, you won't have any of the donor privileges, like yellow username, custom badge and discord custom role and username color! If you wish to keep supporting Ripple and you don't want to lose your donor privileges, you can donate again by clicking on 'Support us' on Ripple's website.".format(expireIn)))
 
 		# Deprecate telegram 2fa and send alert
 		if userUtils.deprecateTelegram2Fa(userID):
@@ -264,6 +279,8 @@ def handle(tornadoRequest):
 			longitude = 0
 			countryLetters = "XX"
 			country = countryHelper.getCountryID(userUtils.getCountry(userID))
+   
+		saveLoginRecord("success")
 
 		# Set location and country
 		responseToken.setLocation(latitude, longitude)
@@ -284,20 +301,25 @@ def handle(tornadoRequest):
 		# Login failed error packet
 		# (we don't use enqueue because we don't have a token since login has failed)
 		responseData += serverPackets.loginFailed()
+		saveLoginRecord("failed", note="Error packet")
 	except exceptions.invalidArgumentsException:
 		# Invalid POST data
 		# (we don't use enqueue because we don't have a token since login has failed)
 		responseData += serverPackets.loginFailed()
 		responseData += serverPackets.notification("I see what you're doing...")
+		saveLoginRecord("failed", note="Invalid POST data")
 	except exceptions.loginBannedException:
 		# Login banned error packet
 		responseData += serverPackets.loginBanned()
+		saveLoginRecord("failed", note="Banned")
 	except exceptions.loginLockedException:
 		# Login banned error packet
 		responseData += serverPackets.loginLocked()
+		saveLoginRecord("failed", note="Locked")
 	except exceptions.loginCheatClientsException:
 		# Banned for logging in with cheats
 		responseData += serverPackets.loginCheats()
+		saveLoginRecord("failed", note="Logging with cheats")
 	except exceptions.banchoMaintenanceException:
 		# Bancho is in maintenance mode
 		responseData = bytes()
@@ -305,24 +327,35 @@ def handle(tornadoRequest):
 			responseData = responseToken.queue
 		responseData += serverPackets.notification("Our bancho server is in maintenance mode. Please try to login again later.")
 		responseData += serverPackets.loginFailed()
+		saveLoginRecord("failed", note="Bancho is in maintenance mode")
 	except exceptions.banchoRestartingException:
 		# Bancho is restarting
 		responseData += serverPackets.notification("Bancho is restarting. Try again in a few minutes.")
 		responseData += serverPackets.loginFailed()
+		saveLoginRecord("failed", note="Bancho is restarting")
 	except exceptions.need2FAException:
 		# User tried to log in from unknown IP
 		responseData += serverPackets.needVerification()
-	except exceptions.haxException:
+		saveLoginRecord("failed", note="Need 2FA")
+	except exceptions.forceUpdateException:
 		# Using oldoldold client, we don't have client data. Force update.
 		# (we don't use enqueue because we don't have a token since login has failed)
 		responseData += serverPackets.forceUpdate()
 		responseData += serverPackets.notification("Hory shitto, your client is TOO old! Nice prehistory! Please turn update it from the settings!")
+		saveLoginRecord("failed", note="Too old client")
+	except exceptions.haxException:
+		responseData += serverPackets.notification("what")
+		responseData += serverPackets.loginFailed()
+		saveLoginRecord("failed", note="Not HWinfo")
 	except:
 		log.error("Unknown error!\n```\n{}\n{}```".format(sys.exc_info(), traceback.format_exc()))
+		saveLoginRecord("failed", note="unknown error")
 	finally:
 		# Console and discord log
 		if len(loginData) < 3:
 			log.info("Invalid bancho login request from **{}** (insufficient POST data)".format(requestIP), "bunker")
+			saveLoginRecord("failed", note="insufficient POST data")
 
 		# Return token string and data
 		return responseTokenString, responseData
+

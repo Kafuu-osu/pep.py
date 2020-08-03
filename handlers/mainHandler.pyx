@@ -181,18 +181,6 @@ class handler(requestsManager.asyncRequestHandler):
 					if packetID != 4:
 						if packetID in eventHandler:
 							if not userToken.restricted or (userToken.restricted and packetID in packetsRestricted):
-								# Get event name
-								event = packetDict.get(packetID, 'unknownEvent({})'.format(packetID))
-								# Try to unpack packet data
-								unpackedData = unpackPacket(event, packetData)
-								log.info("event: {}, user: {}, packetData: {}".format(
-										event, 
-										'{}({})'.format(userToken.username, userToken.userID), 
-										unpackedData
-									)
-								)
-								# Handle event
-								eventHandler[packetID]()
 
 								# Send the socketio message
 								if glob.sio and event not in excludeEvents:
@@ -200,6 +188,22 @@ class handler(requestsManager.asyncRequestHandler):
 									userData = {
 										k: str(v) if isinstance(v, bytes) else v for k, v in afterHandlerToken.__dict__.items() if type(v) in dataTypes}
 									glob.sio.send(event, {'packetData': unpackedData}, userData=userData)
+
+									# Get event name
+									event = packetDict.get(packetID, 'unknownEvent({})'.format(packetID))
+									# Try to unpack packet data
+									unpackedData = unpackPacket(event, packetData)
+									log.info("event: {}, user: {}, packetData: {}".format(
+											event, 
+											'{}({})'.format(userToken.username, userToken.userID), 
+											unpackedData
+										)
+									)
+									
+								# Handle event
+								eventHandler[packetID]()
+
+
 							else:
 								log.warning("Ignored packet id from {} ({}) (user is restricted)".format(requestTokenString, packetID))
 						else:
