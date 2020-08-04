@@ -21,7 +21,8 @@ import random
 
 
 def handle(tornadoRequest):
-	country=atitude=longitude=userID=osuVersion=requestIP = ""
+	country=userID=osuVersion=requestIP = ""
+	atitude=longitude = 0
 	clientData = []
  
 	# Data to return
@@ -30,7 +31,7 @@ def handle(tornadoRequest):
 	responseData = bytes()
  
 	def saveLoginRecord(status, note=""):
-		userUtils.saveLoginRecord(userID, osuVersion, requestIP, status, country, latitude, longitude, clientData=clientData, note=note)
+		userUtils.saveLoginRecord(userID, osuVersion, requestIP, status, countryHelper.getCountryLetters(country), latitude, longitude, clientData=clientData, note=note)
 
 	# Get IP from tornado request
 	requestIP = tornadoRequest.getRequestIP()
@@ -275,8 +276,6 @@ def handle(tornadoRequest):
 		else:
 			# Set location to 0,0 and get country from db
 			log.warning("Location skipped")
-			latitude = 0
-			longitude = 0
 			countryLetters = "XX"
 			country = countryHelper.getCountryID(userUtils.getCountry(userID))
    
