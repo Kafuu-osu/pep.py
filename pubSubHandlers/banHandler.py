@@ -3,16 +3,16 @@ from common.ripple import userUtils
 from objects import glob
 
 class handler(generalPubSubHandler.generalPubSubHandler):
-	def __init__(self):
-		super().__init__()
-		self.type = "int"
+    def __init__(self):
+        super().__init__()
+        self.type = "int"
 
-	def handle(self, userID):
-		userID = super().parseData(userID)
-		if userID is None:
-			return
-		targetToken = glob.tokens.getTokenFromUserID(userID)
-		if targetToken is not None:
-			targetToken.privileges = userUtils.getPrivileges(userID)
-			targetToken.checkBanned()
-			targetToken.checkRestricted()
+    def handle(self, userID):
+        userID = super().parseData(userID)
+        if userID is None:
+            return
+        targetToken = glob.tokens.getTokenFromUserID(userID)
+        if targetToken != None:
+            targetToken.privileges = userUtils.getPrivileges(userID)
+            targetToken.checkBanned()
+            targetToken.checkRestricted()
