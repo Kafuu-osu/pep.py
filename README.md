@@ -1,44 +1,38 @@
-## pep.py
-The Bancho osuKafuu uses (pased on Ainu's version of pep.py by Ripple) It handles:
-- Client login
-- Online users listing and statuses
-- Public and private chat
-- Spectator
-- Multiplayer
-- The Bot
+## Pep.Py
 
-## Requirements
-- Python 3.6
-- Cython
-- C compiler
-- MySQLdb (`mysqlclient`)
-- Tornado
-- Bcrypt
-- Raven
+SpECiAL THaNKs To [ReALisTIKosU](https://ussr.pl/) aND [AInU](https://ainu.pw/)
 
-## How to set up pep.py
-First of all, initialize and update the submodules
+## 需要
+Python 3.8
+
+## 初始化子模块
 ```
-$ git submodule init && git submodule update
+git submodule init
+git submodule update
 ```
-afterwards, install the required dependencies with pip
+
+## 安装依赖
 ```
-$ pip install -r requirements.txt
+pip38 install -r requirements.txt
 ```
-then, compile all `*.pyx` files to `*.so` or `*.dll` files using `setup.py` (distutils file)
+
+
+## 编译
 ```
-$ python3 setup.py build_ext --inplace
+python38 setup.py build_ext --inplace
 ```
-finally, run pep.py once to create the default config file and edit it
+
+
+## 运行
 ```
-$ python3 pep.py
-...
-$ nano config.ini
+python38 pep.py 
 ```
-you can run pep.py by typing
+
+## 修改配置文件
 ```
-$ python3 pep.py
+vim config.ini
 ```
+
 
 ## License
 All code in this repository is licensed under the GNU AGPL 3 License.  
