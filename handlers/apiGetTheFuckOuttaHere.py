@@ -8,5 +8,7 @@ class handler(requestsManager.asyncRequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.engine
     def asyncGet(self):
-        #self.set_status(404)
-        self.write("")
+        self.add_header("Access-Control-Allow-Origin", "*")
+        self.add_header("Content-Type", "application/json")
+        self.write(r"{}")
+        self.set_status(200)
