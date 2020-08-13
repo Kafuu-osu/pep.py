@@ -20,8 +20,8 @@ def connect():
     glob.BOT_NAME = userUtils.getUsername(999)
     token = glob.tokens.addToken(999)
     token.actionID = actions.IDLE
-    token.actionText = "\nWelcome to osu!Kafuu~~"
-    token.pp = 4800
+    token.actionText = "\n欢迎来到卡服"
+    token.pp = 1
     token.accuracy = 0.997
     token.playcount = 2000
     token.totalScore = 940857703

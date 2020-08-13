@@ -62,17 +62,9 @@ def instantRestart(fro, chan, message):
 def faq(fro, chan, message):
     # TODO: Unhardcode this
     messages = {
-        "rules": "Please make sure to check (osuKafuu! rules)[https://ussr.pl/doc/rules].",
-        "swearing": "Please don't abuse swearing",
-        "spam": "Please don't spam",
-        "offend": "Please don't offend other players",
-        "github": "(osuKafuu! Github page!)[https://github.com/osuKafuu]",
-        "discord": "(Join osuKafuu Discord!)[https://discord.gg/87E2K46]",
-        "changelog": "Check our (git repo)[https://github.com/osuKafuu] for changes!",
-        "english": "Please keep this channel in english.",
-        "topic": "Can you please drop the topic and talk about something else?",
-        "lines": "Please try to keep your sentences on a single line to avoid getting silenced.",
-        "cheating": "Hacking is not permitted on osuKafuu! If you spot someone cheating, report them to the staff or RealistikDash."
+        "呃啊": "呼呼",
+        "pr群": "233283633",
+        "kafuu群": "955377404"
     }
     key = message[0].lower()
     if key not in messages:
@@ -1393,7 +1385,7 @@ def mirror(fro, chan, message):
     
 
 def commandHelp():
-    help = "\n".join(
+    help = "好吧，机器人有这么些命令，有些命令你得私聊bot，不能直接在聊天频道发（否则没效果）\n" + "\n".join(
         (f"{i.get('trigger')}" + 
         (f" {i.get('syntax')}" if i.get('syntax') else "")
         for i in commands if "!" in i.get("trigger"))
@@ -1416,18 +1408,18 @@ commands = [
         "callback": roll
     }, {
         "trigger": "!faq",
-        "syntax": "<name>",
+        "syntax": "<name> 额",
         "callback": faq
     }, {
         "trigger": "!report",
         "callback": report
     }, {
         "trigger": "!ppboard",
-        "syntax": "<relax/vanilla>",
+        "syntax": "<relax/vanilla> 如：!ppboard relax（将relax的排行榜切换为pp显示，要重新点一次排行榜刷新）",
         "callback": usePPBoard
     }, {
         "trigger": "!scoreboard",
-        "syntax": "<relax/vanilla>",
+        "syntax": "<relax/vanilla> 如：!ppboard relax（将relax的排行榜切换为score显示，要重新点一次排行榜刷新）",
         "callback": useScoreBoard
     }, {
         "trigger": "!whitelist",
@@ -1436,96 +1428,105 @@ commands = [
         "callback": whitelistUserPPLimit
     }, {
         "trigger": "!announce",
-        "syntax": "<announcement>",
+        "syntax": "<announcement> 管理员发公告的",
         "privileges": privileges.ADMIN_SEND_ALERTS,
         "callback": postAnnouncement
     },    {
         "trigger": "!ask",
-        "syntax": "<question>",
+        "syntax": "<question> 问问题",
         "callback": ask
     }, {
         "trigger": "!map",
-        "syntax": "<rank/unrank> <set/map> <ID>",
+        "syntax": "<rank/unrank> <set/map> <ID> 管理员用来rank图的",
         "privileges": privileges.ADMIN_MANAGE_BEATMAPS,
         "callback": editMap
     }, {
         "trigger": "!mm00",
+        "syntax": "额",
         "callback": mm00
     }, {
         "trigger": "!alert",
-        "syntax": "<message>",
+        "syntax": "<message> 管理员发全局消息的",
         "privileges": privileges.ADMIN_SEND_ALERTS,
         "callback": alert
     }, {
         "trigger": "!alertuser",
-        "syntax": "<username> <message>",
+        "syntax": "<username> <message> 管理员提醒人的",
         "privileges": privileges.ADMIN_SEND_ALERTS,
         "callback": alertUser,
     }, {
         "trigger": "!moderated",
+        "syntax": "忘了干嘛的了",
         "privileges": privileges.ADMIN_CHAT_MOD,
         "callback": moderated
     }, {
         "trigger": "!kickall",
+        "syntax": "管理员把服务器所有玩家踢下线的",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": kickAll
     }, {
         "trigger": "!kick",
-        "syntax": "<target>",
+        "syntax": "<target> 管理员踢人下线的",
         "privileges": privileges.ADMIN_KICK_USERS,
         "callback": kick
     }, {
         "trigger": "!bot reconnect",
+        "syntax": "管理员重启bot的",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": fokabotReconnect
     }, {
         "trigger": "!silence",
-        "syntax": "<target> <amount> <unit(s/m/h/d)> <reason>",
+        "syntax": "<target> <amount> <unit(s/m/h/d)> <reason> 管理员禁言人的",
         "privileges": privileges.ADMIN_SILENCE_USERS,
         "callback": silence
     }, {
         "trigger": "!removesilence",
-        "syntax": "<target>",
+        "syntax": "<target> 管理员解禁人的",
         "privileges": privileges.ADMIN_SILENCE_USERS,
         "callback": removeSilence
     }, {
         "trigger": "!system restart",
+        "syntax": "bancho重启的",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": systemRestart
     }, {
         "trigger": "!system shutdown",
+        "syntax": "bancho拜拜的",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": systemShutdown
     }, {
         "trigger": "!system reload",
+        "syntax": "bancho重载的",
         "privileges": privileges.ADMIN_MANAGE_SETTINGS,
         "callback": systemReload
     }, {
         "trigger": "!system maintenance",
+        "syntax": "bancho维护的",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": systemMaintenance
     }, {
         "trigger": "!system status",
+        "syntax": "管理员看看服务器状态的",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": systemStatus
     }, {
         "trigger": "!ban",
-        "syntax": "<target>",
+        "syntax": "<target> 管理员ban人的",
         "privileges": privileges.ADMIN_BAN_USERS,
         "callback": ban
     }, {
         "trigger": "!unban",
-        "syntax": "<target>",
+        "syntax": "<target> 管理员解ban人的",
         "privileges": privileges.ADMIN_BAN_USERS,
         "callback": unban
     }, {
         "trigger": "!restrict",
-        "syntax": "<target>",
+        "syntax": "<target> 管理员限制人的",
         "privileges": privileges.ADMIN_BAN_USERS,
         "callback": restrict
     }, {
         "trigger": "!unrestrict",
-        "syntax": "<target>",
+        "syntax": "<target> 管理员解除限制人的",
         "privileges": privileges.ADMIN_BAN_USERS,
         "callback": unrestrict
     }, {
@@ -1540,9 +1541,10 @@ commands = [
     }, {
         "trigger": "!with",
         "callback": tillerinoMods,
-        "syntax": "<mods>"
+        "syntax": "<mods> 噢 tillerino可以用!with hr这样的方式查询pp"
     }, {
         "trigger": "!last",
+        "syntax": "tillerino上个pp记录",
         "callback": tillerinoLast
     }, {
         "trigger": "!ir",
@@ -1550,32 +1552,39 @@ commands = [
         "callback": instantRestart
     }, {
         "trigger": "!pp",
+        "syntax": "看看你的pp",
         "callback": pp
     }, {
         "trigger": "!update",
+        "syntax": "更新地图",
         "callback": updateBeatmap
     }, {
         "trigger": "!mp",
-        "privileges": privileges.USER_TOURNAMENT_STAFF,
-        "syntax": "<subcommand>",
+        #"privileges": privileges.USER_TOURNAMENT_STAFF,
+        "syntax": "<subcommand> mp命令，可以打一个!mp help看看！",
         "callback": multiplayer
     }, {
         "trigger": "!switchserver",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
-        "syntax": "<username> <server_address>",
+        "syntax": "<username> <server_address> 管理员用来搞事的",
         "callback": switchServer
     }, {
         "trigger": "!rtx",
         "privileges": privileges.ADMIN_MANAGE_USERS,
-        "syntax": "<username> <message>",
+        "syntax": "<username> <message> 管理员给人搞消息的",
         "callback": rtx
     }, {
         "trigger": "!bloodcat",
+        "syntax": "这可以获取血猫下图地址",
         "callback": bloodcat
+    }, {
+        "trigger": "!mirror",
+        "syntax": "这可以获取血猫和sayobot下图地址",
+        "callback": mirror
     }, {
         "trigger": "!acc",
         "callback": tillerinoAcc,
-        "syntax": "<accuarcy>"
+        "syntax": "<accuarcy> 这个可以查指定acc的pp"
     }
 ]
 
