@@ -1407,19 +1407,19 @@ commands = [
         "trigger": "!roll",
         "callback": roll
     }, {
-        "trigger": "!faq",
-        "syntax": "<name> 额",
+        "trigger": "!faq （额）",
+        "syntax": "<name>",
         "callback": faq
     }, {
         "trigger": "!report",
         "callback": report
     }, {
-        "trigger": "!ppboard",
-        "syntax": "<relax/vanilla> 如：!ppboard relax（将relax的排行榜切换为pp显示，要重新点一次排行榜刷新）",
+        "trigger": "!ppboard （如：!ppboard relax（将relax的排行榜切换为pp显示，要重新点一次排行榜刷新）",
+        "syntax": "<relax/vanilla>",
         "callback": usePPBoard
     }, {
-        "trigger": "!scoreboard",
-        "syntax": "<relax/vanilla> 如：!ppboard relax（将relax的排行榜切换为score显示，要重新点一次排行榜刷新）",
+        "trigger": "!scoreboard （如：!ppboard relax（将relax的排行榜切换为score显示，要重新点一次排行榜刷新））",
+        "syntax": "<relax/vanilla>",
         "callback": useScoreBoard
     }, {
         "trigger": "!whitelist",
@@ -1427,17 +1427,17 @@ commands = [
         "syntax": "<target> <relax/vanilla>",
         "callback": whitelistUserPPLimit
     }, {
-        "trigger": "!announce",
-        "syntax": "<announcement> 管理员发公告的",
+        "trigger": "!announce （管理员发公告的）",
+        "syntax": "<announcement>",
         "privileges": privileges.ADMIN_SEND_ALERTS,
         "callback": postAnnouncement
     },    {
-        "trigger": "!ask",
-        "syntax": "<question> 问问题",
+        "trigger": "!ask （问问题）",
+        "syntax": "<question>",
         "callback": ask
     }, {
-        "trigger": "!map",
-        "syntax": "<rank/unrank> <set/map> <ID> 管理员用来rank图的",
+        "trigger": "!map （管理员用来rank图的）",
+        "syntax": "<rank/unrank> <set/map> <ID>",
         "privileges": privileges.ADMIN_MANAGE_BEATMAPS,
         "callback": editMap
     }, {
@@ -1445,88 +1445,80 @@ commands = [
         "syntax": "额",
         "callback": mm00
     }, {
-        "trigger": "!alert",
-        "syntax": "<message> 管理员发全局消息的",
+        "trigger": "!alert （管理员发全局消息的）",
+        "syntax": "<message>",
         "privileges": privileges.ADMIN_SEND_ALERTS,
         "callback": alert
     }, {
-        "trigger": "!alertuser",
-        "syntax": "<username> <message> 管理员提醒人的",
+        "trigger": "!alertuser （管理员提醒人的）",
+        "syntax": "<username> <message>",
         "privileges": privileges.ADMIN_SEND_ALERTS,
         "callback": alertUser,
     }, {
-        "trigger": "!moderated",
-        "syntax": "忘了干嘛的了",
+        "trigger": "!moderated （忘了干嘛的了）",
         "privileges": privileges.ADMIN_CHAT_MOD,
         "callback": moderated
     }, {
-        "trigger": "!kickall",
-        "syntax": "管理员把服务器所有玩家踢下线的",
+        "trigger": "!kickall （管理员把服务器所有玩家踢下线的）",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": kickAll
     }, {
-        "trigger": "!kick",
-        "syntax": "<target> 管理员踢人下线的",
+        "trigger": "!kick （管理员踢人下线的）",
+        "syntax": "<target>",
         "privileges": privileges.ADMIN_KICK_USERS,
         "callback": kick
     }, {
-        "trigger": "!bot reconnect",
-        "syntax": "管理员重启bot的",
+        "trigger": "!bot reconnect （管理员重启bot的）",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": fokabotReconnect
     }, {
-        "trigger": "!silence",
-        "syntax": "<target> <amount> <unit(s/m/h/d)> <reason> 管理员禁言人的",
+        "trigger": "!silence （管理员禁言人的）",
+        "syntax": "<target> <amount> <unit(s/m/h/d)> <reason>",
         "privileges": privileges.ADMIN_SILENCE_USERS,
         "callback": silence
     }, {
-        "trigger": "!removesilence",
-        "syntax": "<target> 管理员解禁人的",
+        "trigger": "!removesilence （管理员解禁人的）",
+        "syntax": "<target>",
         "privileges": privileges.ADMIN_SILENCE_USERS,
         "callback": removeSilence
     }, {
-        "trigger": "!system restart",
-        "syntax": "bancho重启的",
+        "trigger": "!system restart (bancho重启的)",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": systemRestart
     }, {
-        "trigger": "!system shutdown",
-        "syntax": "bancho拜拜的",
+        "trigger": "!system shutdown (bancho拜拜的）",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": systemShutdown
     }, {
-        "trigger": "!system reload",
-        "syntax": "bancho重载的",
+        "trigger": "!system reload （bancho重载的）",
         "privileges": privileges.ADMIN_MANAGE_SETTINGS,
         "callback": systemReload
     }, {
-        "trigger": "!system maintenance",
-        "syntax": "bancho维护的",
+        "trigger": "!system maintenance （bancho维护的）",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": systemMaintenance
     }, {
-        "trigger": "!system status",
-        "syntax": "管理员看看服务器状态的",
+        "trigger": "!system status （管理员看看服务器状态的）",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": systemStatus
     }, {
-        "trigger": "!ban",
-        "syntax": "<target> 管理员ban人的",
+        "trigger": "!ban （管理员ban人的）",
+        "syntax": "<target>",
         "privileges": privileges.ADMIN_BAN_USERS,
         "callback": ban
     }, {
-        "trigger": "!unban",
-        "syntax": "<target> 管理员解ban人的",
+        "trigger": "!unban （管理员解ban人的）",
+        "syntax": "<target>",
         "privileges": privileges.ADMIN_BAN_USERS,
         "callback": unban
     }, {
-        "trigger": "!restrict",
-        "syntax": "<target> 管理员限制人的",
+        "trigger": "!restrict （管理员限制人的）",
+        "syntax": "<target>",
         "privileges": privileges.ADMIN_BAN_USERS,
         "callback": restrict
     }, {
-        "trigger": "!unrestrict",
-        "syntax": "<target> 管理员解除限制人的",
+        "trigger": "!unrestrict （管理员解除限制人的）",
+        "syntax": "<target>",
         "privileges": privileges.ADMIN_BAN_USERS,
         "callback": unrestrict
     }, {
@@ -1539,52 +1531,47 @@ commands = [
         "trigger": "\x01ACTION is watching",
         "callback": tillerinoNp
     }, {
-        "trigger": "!with",
+        "trigger": "!with （噢 tillerino可以用!with hr这样的方式查询pp）",
         "callback": tillerinoMods,
-        "syntax": "<mods> 噢 tillerino可以用!with hr这样的方式查询pp"
+        "syntax": "<mods>"
     }, {
-        "trigger": "!last",
-        "syntax": "tillerino上个pp记录",
+        "trigger": "!last （tillerino上个pp记录）",
         "callback": tillerinoLast
     }, {
         "trigger": "!ir",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
         "callback": instantRestart
     }, {
-        "trigger": "!pp",
-        "syntax": "看看你的pp",
+        "trigger": "!pp （看看你的pp）",
         "callback": pp
     }, {
-        "trigger": "!update",
-        "syntax": "更新地图",
+        "trigger": "!update （更新地图）",
         "callback": updateBeatmap
     }, {
-        "trigger": "!mp",
+        "trigger": "!mp （mp命令，可以打一个!mp help看看！）",
         #"privileges": privileges.USER_TOURNAMENT_STAFF,
-        "syntax": "<subcommand> mp命令，可以打一个!mp help看看！",
+        "syntax": "<subcommand>",
         "callback": multiplayer
     }, {
-        "trigger": "!switchserver",
+        "trigger": "!switchserver （管理员用来搞事的）",
         "privileges": privileges.ADMIN_MANAGE_SERVERS,
-        "syntax": "<username> <server_address> 管理员用来搞事的",
+        "syntax": "<username> <server_address>",
         "callback": switchServer
     }, {
-        "trigger": "!rtx",
+        "trigger": "!rtx （管理员给人搞消息的）",
         "privileges": privileges.ADMIN_MANAGE_USERS,
-        "syntax": "<username> <message> 管理员给人搞消息的",
+        "syntax": "<username> <message>",
         "callback": rtx
     }, {
-        "trigger": "!bloodcat",
-        "syntax": "这可以获取血猫下图地址",
+        "trigger": "!bloodcat （这可以获取血猫下图地址）",
         "callback": bloodcat
     }, {
-        "trigger": "!mirror",
-        "syntax": "这可以获取血猫和sayobot下图地址",
+        "trigger": "!mirror （这可以获取血猫和sayobot下图地址）",
         "callback": mirror
     }, {
-        "trigger": "!acc",
+        "trigger": "!acc （这个可以查指定acc的pp）",
         "callback": tillerinoAcc,
-        "syntax": "<accuarcy> 这个可以查指定acc的pp"
+        "syntax": "<accuarcy>"
     }
 ]
 
