@@ -156,7 +156,7 @@ def handle(tornadoRequest):
             responseToken.enqueue(serverPackets.notification("As stated on our blog, Telegram 2FA has been deprecated on 29th June 2018. Telegram 2FA has just been disabled from your account. If you want to keep your account secure with 2FA, please enable TOTP-based 2FA from our website https://ripple.moe. Thank you for your patience."))
 
         # If the client version used is lower than stable, but still greater than minversion: tip
-        if osuVersionID < glob.conf.config["client"]["stableversion"]:
+        if selfClient and osuVersionID < glob.conf.config["client"]["stableversion"]:
             responseToken.enqueue(serverPackets.notification(
                 "客户端有更新！请到osu!Kafuu官网：https://old.kafuu.pro 或 官方群（955377404）下载并使用最新客户端。\n不过您可以继续使用此客户端，直到它过期（可能很快）。所以请您最好尽快升级。"
                )
