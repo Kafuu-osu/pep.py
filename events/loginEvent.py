@@ -41,8 +41,7 @@ def handle(tornadoRequest):
     osuVersion = "unknown"
 
     # Split POST body so we can get username/password/hardware data
-    # 2:-3 thing is because requestData has some escape stuff that we don't need
-    loginData = str(tornadoRequest.request.body)[2:-3].split("\\n")
+    loginData = tornadoRequest.request.body.decode('utf-8')[:-1].split('\n')
     try:
         # Make sure loginData is valid
         if len(loginData) < 3:
