@@ -61,6 +61,10 @@ class config:
             parsedConfig.get("server", "deltaurl")
             parsedConfig.get("server", "publicdelta")
 
+            parsedConfig.get("client", "minversion")
+            parsedConfig.get("client", "stableversion")
+            parsedConfig.get("client", "buildnames")
+
             parsedConfig.get("cheesegull", "apiurl")
             parsedConfig.get("cheesegull", "apikey")
 
@@ -124,6 +128,11 @@ class config:
         self.config.set("server", "letsapiurl", "http://127.0.0.1:5002/letsapi")
         self.config.set("server", "deltaurl", "delta.ppy.sh")
         self.config.set("server", "publicdelta", "0")
+
+        self.config.add_section("client")
+        self.config.set("client", "minversion", "0")
+        self.config.set("client", "stableversion", "0")
+        self.config.set("client", "buildnames", "HEHENONE")
 
         self.config.add_section("cheesegull")
         self.config.set("cheesegull", "apiurl", "https://storage.ripple.moe/api")

@@ -56,10 +56,21 @@ def handle(tornadoRequest):
         # [4] disk ID
         splitData = loginData[2].split("|")
         osuVersion = splitData[0]
+        osuVersionID = "".join(filter(str.isdigit, (osuVersion.split(".") or [""])[0])) or 0
         timeOffset = int(splitData[1])
         clientData = splitData[3].split(":")[:5]
+
+        # old client?
         if len(clientData) < 4:
             raise exceptions.forceUpdateException()
+
+        # self client?
+        selfClient = len([i for i in glob.conf.config["client"]["buildnames"].replace(" ", "").split(",") if i and i in osuVersion]) > 0
+
+        # smaller than minversion: refuse login
+        if selfClient and osuVersionID < glob.conf.config["client"]["minversion"]:
+            raise exceptions.forceUpdateException()
+        
 
         # Try to get the ID from username
         username = str(loginData[0])
@@ -142,6 +153,13 @@ def handle(tornadoRequest):
         # Deprecate telegram 2fa and send alert
         if userUtils.deprecateTelegram2Fa(userID):
             responseToken.enqueue(serverPackets.notification("As stated on our blog, Telegram 2FA has been deprecated on 29th June 2018. Telegram 2FA has just been disabled from your account. If you want to keep your account secure with 2FA, please enable TOTP-based 2FA from our website https://ripple.moe. Thank you for your patience."))
+
+        # If the client version used is lower than stable, but still greater than minversion: tip
+        if selfClient and osuVersionID < glob.conf.config["client"]["stableversion"]:
+            responseToken.enqueue(serverPackets.notification(
+                "客户端有更新！请到osu!Kafuu官网：https://old.kafuu.pro 或 官方群（955377404）下载并使用最新客户端。\n不过您可以继续使用此客户端，直到它过期（可能很快）。所以请您最好尽快升级。"
+               )
+            )
 
         # Set silence end UNIX time in token
         responseToken.silenceEndTime = userUtils.getSilenceEnd(userID)
@@ -338,9 +356,9 @@ def handle(tornadoRequest):
     except exceptions.forceUpdateException:
         # Using oldoldold client, we don't have client data. Force update.
         # (we don't use enqueue because we don't have a token since login has failed)
-        responseData += serverPackets.forceUpdate()
-        responseData += serverPackets.notification("Hory shitto, your client is TOO old! Nice prehistory! Please turn update it from the settings!")
-        saveLoginRecord("failed", note="Too old client")
+        # responseData += serverPackets.forceUpdate()
+        responseData += serverPackets.notification("您当前所使用的客户端（{}）太旧了，请到osu!Kafuu官网：https://old.kafuu.pro 或 官方群（955377404）下载并使用最新客户端登录。".format(osuVersion))
+        saveLoginRecord("failed", note="Too old client: {}".format(osuVersion))
     except exceptions.haxException:
         responseData += serverPackets.notification("what")
         responseData += serverPackets.loginFailed()
@@ -355,5 +373,6 @@ def handle(tornadoRequest):
             saveLoginRecord("failed", note="insufficient POST data")
 
         # Return token string and data
+        print(responseData)
         return responseTokenString, responseData
 
